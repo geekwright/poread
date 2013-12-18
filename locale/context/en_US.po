@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Translate Prototype\n"
+"POT-Creation-Date: 2013-12-17 09:53-0600\n"
+"PO-Revision-Date: 2013-12-17 09:54-0600\n"
+"Last-Translator: \n"
+"Language-Team: Test <richard@geekwright.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;ngettext;pgettext:1c,2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: /home/richard/sites/test/poread\n"
+
+#: /home/richard/sites/test/poread/context.php:38
+msgctxt "direction|south"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:41
+msgctxt "time|seconds"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:44
+msgctxt "size|small"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:47
+msgctxt "direction|north"
+msgid "N"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:50
+msgctxt "nitrogen"
+msgid "N"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:53
+msgctxt "no"
+msgid "N"
+msgstr ""

@@ -1,0 +1,108 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Translate Prototype\n"
+"POT-Creation-Date: 2013-12-17 14:21-0600\n"
+"PO-Revision-Date: 2013-12-17 14:22-0600\n"
+"Last-Translator: \n"
+"Language-Team: Test <richard@geekwright.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;ngettext;pgettext:1c,2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: /home/richard/sites/test/poread\n"
+
+#: /home/richard/sites/test/poread/context.php:40
+msgctxt "direction|south"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:43
+msgctxt "time|seconds"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:46
+msgctxt "size|small"
+msgid "S"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:49
+msgctxt "direction|north"
+msgid "N"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:52
+msgctxt "nitrogen"
+msgid "N"
+msgstr ""
+
+#: /home/richard/sites/test/poread/context.php:55
+msgctxt "no"
+msgid "N"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:38
+msgid "You are not allowed to do this action!"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:39
+msgid "Comment updated successfully!"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:40
+msgid "Add Category"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:41
+msgid "Images deleted successfully!"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:42
+msgid "Sorry, Red Mexico Common Utilities has not been installed yet!"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example2.php:43
+msgid "Installing update..."
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:38
+msgid "Configuration"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:39
+msgid "Control Panel"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:40
+msgid "Could not install autorun file. Please try again."
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:41
+msgid "Select a file or a folder"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:42
+msgid "When ejecting the drive, close the apps that are locking it"
+msgstr ""
+
+#: /home/richard/sites/test/poread/example3.php:43
+msgid "You do not have sufficient privileges for this operation."
+msgstr ""
+
+#: /home/richard/sites/test/poread/index.php:39
+msgid ""
+"This is how the story goes.\n"
+"\n"
+msgstr ""
+
+#: /home/richard/sites/test/poread/index.php:42
+#, php-format
+msgid "%d pig went to the market\n"
+msgid_plural "%d pigs went to the market\n"
+msgstr[0] ""
+msgstr[1] ""

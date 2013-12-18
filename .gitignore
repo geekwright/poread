@@ -1,0 +1,7 @@
+# no backup files, editor temp
+*~
+\#*
+*.bak
+composer.lock
+vendor/
+cache/*
