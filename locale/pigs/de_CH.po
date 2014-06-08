@@ -15,16 +15,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: pigs.php:19
-msgid ""
-"This is how the story goes.\n"
-"\n"
-msgstr ""
-"Und so geht die Geschichte.\n"
-"\n"
+msgid "This is how the story goes."
+msgstr "Und so geht die Geschichte."
 
 #: pigs.php:21
 #, php-format
-msgid "%d pig went to the market\n"
-msgid_plural "%d pigs went to the market\n"
-msgstr[0] "%d Schwein ging zum Markt\n"
-msgstr[1] "%d Schweine gingen zum Markt\n"
+msgid "%d pig went to the market"
+msgid_plural "%d pigs went to the market"
+msgstr[0] "%d Schwein ging zum Markt"
+msgstr[1] "%d Schweine gingen zum Markt"

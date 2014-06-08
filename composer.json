@@ -3,17 +3,11 @@
     "license": "GPL-2.0+",
     "type": "project",
     "description": "XOOPS gettext PO file reader",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/raulferras/PHP-po-parser"
-        }
-    ],
     "require": {
         "php": ">=5.3.7",
-        "maximebf/debugbar": "1.*",
+        "maximebf/debugbar": "1.9.*",
         "raveren/kint": "*",
         "tedivm/stash": "0.11.*",
-        "raulferras/po-parser": "3.0.*"
+        "sepia/po-parser": "3.0.*"
     }
 }

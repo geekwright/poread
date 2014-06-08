@@ -34,17 +34,18 @@ $translate->textdomain('pigs', $locale);
 
 $debugbar['time']->stopMeasure('PoRead');
 
-print "<pre>";
 $debugbar['time']->startMeasure('Translate', '1*gettext() 6*ngettext()');
-print $translate->gettext("This is how the story goes.\n\n");
+print $translate->gettext("This is how the story goes.");
+print "<br><br>";
 for ($number=6; $number>=0; $number--) {
     print sprintf(
-        $translate->ngettext("%d pig went to the market\n", "%d pigs went to the market\n", $number),
+        $translate->ngettext("%d pig went to the market", "%d pigs went to the market", $number),
         $number
     );
+    print "<br>";
 }
 $debugbar['time']->stopMeasure('Translate');
-print "</pre>\n";
+print "<br>";
 
 echo '<br /><hr><a href="index.php">Plurals</a> | <a href="context.php">Context</a>'
 . ' | <a href="example2.php">RMC Files</a> | <a href="example3.php">Misc</a><br />';

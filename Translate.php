@@ -30,7 +30,7 @@
  * @category  Translate
  * @package   Translate
  * @author    Richard Griffith <richard@geekwright.com>
- * @copyright 2013 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
  * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
@@ -60,6 +60,7 @@ class Translate
         // set up cache driver
         $options = array('path' => dirname(__FILE__) . '/cache/');
         $driver = new Stash\Driver\FileSystem($options);
+        //$driver = new Stash\Driver\Sqlite($options);
 
         // Create the actual cache object, injecting the backend
         $this->cache = new Stash\Pool($driver);
@@ -164,12 +165,12 @@ class Translate
      * @param type   $msgid    untranslated singular form
      * @param type   $msgid2   untranslated plural form
      * @param type   $n        number to use a basis for message selection
+     * @param string $domain   optional override domain for this call only
      * @param string $language optional override language code for this call only
-     * @param string $domain   optional override domain  for this call only
      *
      * @return type
      */
-    public function ngettext($msgid, $msgid2, $n, $language = null, $domain = null)
+    public function ngettext($msgid, $msgid2, $n, $domain = null, $language = null)
     {
         if ($language === null && $domain === null) {
             $language = $this->language;
@@ -284,20 +285,20 @@ class Translate
         // For now, we have just build a fixed directory :(
 
         $file = 'locale/'.$domain.'/'.$language.'.po';
-        if (!file_exists($file)) {
+        if (!is_readable($file)) {
             return false; // no provider
         }
 
-        $parser = new \Sepia\poparser();
+        $parser = new \Sepia\PoParser();
         try {
-            $entries = $parser->read($file);
+            $entries = $parser->parse($file);
         } catch (\Exception $e) {
             \Kint::dump($e);
             return false;
         }
 
         // get plural rule from headers
-        $headers = $parser->headers();
+        $headers = $parser->getHeaders();
         $header = '';
         // undo the quoting and escaping done in poparser - bleah!!
         foreach ($headers as $x) {
@@ -346,8 +347,9 @@ class Translate
      *
      * @param callable $regenFunction function to generate cached content
      * @param int      $ttl           cache time to live in seconds
-     * @param mixed    $prefix        variable argument list of cachekey, starting with prefix.
-     *                                All arguments after prefex are passed to regenFunction
+     * @param mixed    $prefix,...    variable argument list of cachekey, starting with prefix.
+     *                                All cache key components will be joined as a path,
+     *                                i.e. 'module', 'configs' becomes 'module/configs'
      *
      * @return mixed
      *
@@ -428,6 +430,52 @@ class Translate
         $res = str_replace('n', '$n', $res);
         $res = str_replace('plural', '$plural', $res);
         $res = str_replace('$temp', '$nplurals', $res);
+
+        // tokenize result to look for mischief - this string will used in be eval()!
+        $source = '<?php ' . $res; // add open tag to make this PHP
+        $tokens = token_get_all($source);
+        array_shift($tokens); // get rid of T_OPEN_TAG we added above.
+
+        foreach ($tokens as $token) {
+            //var_dump($token);
+            if (is_string($token)) {
+                // check for accepted simple 1-character tokens
+                if (!in_array($token, array('=', '%', '(', ')', '<', '>', '?', ':', ';'))) {
+                    Kint::dump($res);
+                    trigger_error(sprintf('Illegal token (%s) in .po file plural rule', $token));
+                    $res = '';
+                }
+            } else {
+                switch ($token[0]) {
+                    case T_VARIABLE:
+                        // only three variables allowed
+                        if (!in_array($token[1], array('$nplurals', '$plural', '$n'))) {
+                            Kint::dump($res);
+                            trigger_error('Illegal variable name in .po file plural rule');
+                            $res = '';
+                        }
+                        break;
+                    case T_LNUMBER:
+                    case T_WHITESPACE:
+                    case T_IS_EQUAL:
+                    case T_IS_NOT_EQUAL:
+                    case T_BOOLEAN_AND:
+                    case T_BOOLEAN_OR:
+                    case T_IS_SMALLER_OR_EQUAL:
+                    case T_IS_GREATER_OR_EQUAL:
+                        // expected tokens
+                        break;
+                    default:
+                        Kint::dump($res);
+                        trigger_error(sprintf('Illegal token %s in .po file plural rule', token_name($token[0])));
+                        $res = '';
+                        break;
+                }
+            }
+            if (empty($res)) {
+                break;
+            }
+        }
 
         return $res;
     }

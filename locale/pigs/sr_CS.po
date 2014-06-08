@@ -16,15 +16,13 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: pigs.php:19
-msgid ""
-"This is how the story goes.\n"
-"\n"
-msgstr "Овако иде прича.\n\n"
+msgid "This is how the story goes."
+msgstr "Овако иде прича."
 
 #: pigs.php:21
 #, php-format
-msgid "%d pig went to the market\n"
-msgid_plural "%d pigs went to the market\n"
-msgstr[0] "%d мало прасе је отишло на пијац\n"
-msgstr[1] "%d мала прасета су отишла на пијац\n"
-msgstr[2] "%d малих прасића је отишло на пијац\n"
+msgid "%d pig went to the market"
+msgid_plural "%d pigs went to the market"
+msgstr[0] "%d мало прасе је отишло на пијац"
+msgstr[1] "%d мала прасета су отишла на пијац"
+msgstr[2] "%d малих прасића је отишло на пијац"
