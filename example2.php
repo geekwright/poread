@@ -1,19 +1,7 @@
 <?php
-header('Content-type: text/html; charset=utf-8');
-
-include dirname(__FILE__) . '/vendor/autoload.php';
-
-include dirname(__FILE__) . '/Translate.php';
+include 'header.php';
 
 $translate = Translate::getInstance();
-
-echo '<html><head>';
-date_default_timezone_set('America/Chicago');
-$debugbar = new DebugBar\StandardDebugBar();
-$debugbarRenderer = $debugbar->getJavascriptRenderer();
-$debugbarRenderer->setBaseUrl('vendor/maximebf/debugbar/src/DebugBar/Resources/');
-echo $debugbarRenderer->renderHead();
-echo '</head><body>';
 
 $locale = (isset($_GET['lang']))? $_GET['lang'] : 'en';
 
@@ -53,5 +41,4 @@ print "</pre>\n";
 echo '<br /><hr><a href="index.php">Plurals</a> | <a href="context.php">Context</a>'
 . ' | <a href="example2.php">RMC Files</a> | <a href="example3.php">Misc</a><br />';
 
-echo $debugbarRenderer->render();
-echo '</body></html>';
+include 'footer.php';

@@ -9,7 +9,7 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-//namespace Xmf;
+//namespace Xoops\Core;
 
 /**
  * Translate
@@ -30,25 +30,33 @@
  * @category  Translate
  * @package   Translate
  * @author    Richard Griffith <richard@geekwright.com>
- * @copyright 2013-2014 The XOOPS Project http://sourceforge.net/projects/xoops/
- * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+ * @copyright 2013-2015 The XOOPS Project http://sourceforge.net/projects/xoops/
+ * @license   GNU GPL 2 or later (http://www.gnu.org/licenses/gpl-2.0.html)
  * @version   Release: 1.0
  * @link      http://xoops.org
  * @since     1.0
  */
 class Translate
 {
-    /** @type array $catalogs array of loaded po files, keyed by domain and language */
+    /**
+     * @var array $catalogs array of loaded po files, keyed by domain and language
+     */
     protected $catalogs = array();
 
-    /** @type array $domains array of current domains */
+    /**
+     * @var atring[] $domains array of current domains
+     */
     protected $domains = array();
 
-    /** @type string $language current language */
+    /**
+     * @var string $language current language
+     */
     protected $language = null;
 
-    /** @type object $cache cache pool instance */
-    protected $cache = null;
+    /**
+     * @var object $pool cache pool instance
+     */
+    protected $pool = null;
 
     /**
      * Constructor
@@ -59,11 +67,12 @@ class Translate
     {
         // set up cache driver
         $options = array('path' => dirname(__FILE__) . '/cache/');
-        $driver = new Stash\Driver\FileSystem($options);
+        $driver = new \Stash\Driver\FileSystem();
+        $driver->setOptions($options);
         //$driver = new Stash\Driver\Sqlite($options);
 
         // Create the actual cache object, injecting the backend
-        $this->cache = new Stash\Pool($driver);
+        $this->pool = new \Stash\Pool($driver);
     }
 
     /**
@@ -87,12 +96,12 @@ class Translate
      * gettext - get translation of msgid using previously set domain and language
      *
      * @param string $msgid    string to translate
-     * @param string $language optional override language code for this call only
      * @param string $domain   optional override domain  for this call only
+     * @param string $language optional override language code for this call only
      *
      * @return string translated string, of untranslated string if no translation available
      */
-    public function gettext($msgid, $language = null, $domain = null)
+    public function gettext($msgid, $domain = null, $language = null)
     {
         if ($language === null && $domain === null) {
             $language = $this->language;
@@ -104,7 +113,7 @@ class Translate
             } elseif ($domain === null) {
                 $domain = $this->domains;
             }
-            textdomain($domain, $language, false);
+            $this->textdomain($domain, $language, false);
         }
 
         $msgstr = '';
@@ -125,12 +134,12 @@ class Translate
      *
      * @param string $msgctxt  context clue
      * @param string $msgid    string to translate
-     * @param string $language optional override language code for this call only
      * @param string $domain   optional override domain  for this call only
+     * @param string $language optional override language code for this call only
      *
      * @return type
      */
-    public function pgettext($msgctxt, $msgid, $language = null, $domain = null)
+    public function pgettext($msgctxt, $msgid, $domain = null, $language = null)
     {
         if ($language === null && $domain === null) {
             $language = $this->language;
@@ -142,7 +151,7 @@ class Translate
             } elseif ($domain === null) {
                 $domain = $this->domains;
             }
-            textdomain($domain, $language, false);
+            $this->textdomain($domain, $language, false);
         }
 
         $key = $msgctxt . '!' . $msgid;
@@ -182,9 +191,10 @@ class Translate
             } elseif ($domain === null) {
                 $domain = $this->domains;
             }
-            textdomain($domain, $language, false);
+            $this->textdomain($domain, $language, false);
         }
 
+        $n = intval(abs($n)); // should be an unsigned integer
         $msgstr = '';
         foreach ($domain as $dom) {
             if (isset($this->catalogs[$dom][$language]['pluralRule'])) {
@@ -203,7 +213,7 @@ class Translate
     }
 
     /**
-     * gettext_noop - identify string that will be translated elsewhere
+     * gettext_noop - identify string to be translated when used elsewhere
      *
      * @param string $msgid string to identify
      *
@@ -255,7 +265,9 @@ class Translate
         foreach ($domain as $dom) {
             if (!isset($this->catalogs[$dom][$language])) {
                 $msgCat = false;
-                $msgCat = $this->cacheReadSpOld($callback, 30, 'po', $dom, $language);
+                $cacheKey = array('po',$dom,$language);
+                //$msgCat = $xoops->cache()->cacheRead($cacheKey, $callback, 30, $dom, $language);
+                $msgCat = $this->cacheRead($cacheKey, $callback, 30, $dom, $language);
                 $this->catalogs[$dom][$language] = $msgCat;
             }
         }
@@ -276,7 +288,7 @@ class Translate
      *
      * @return mixed array message catalog entry, or false if no suitable po could be loaded
      */
-    public function loadPoForDomain($domain, $language)
+    protected function loadPoForDomain($domain, $language)
     {
         // Map a domain and language to a file name
         //
@@ -289,9 +301,9 @@ class Translate
             return false; // no provider
         }
 
-        $parser = new \Sepia\PoParser();
         try {
-            $entries = $parser->parse($file);
+            $parser = \Sepia\PoParser::parseFile($file);
+            $entries = $parser->getEntries();
         } catch (\Exception $e) {
             \Kint::dump($e);
             return false;
@@ -343,41 +355,45 @@ class Translate
     }
 
     /**
-     * cache block wrapper using Stash SP_OLD invalidation
+     * cache block wrapper -- this should be system supplied
      *
-     * @param callable $regenFunction function to generate cached content
-     * @param int      $ttl           cache time to live in seconds
-     * @param mixed    $prefix,...    variable argument list of cachekey, starting with prefix.
-     *                                All cache key components will be joined as a path,
-     *                                i.e. 'module', 'configs' becomes 'module/configs'
+     * If the cache read for $key is a miss, call the $regenFunction to update it.
+     * With the PRECOMPUTE strategy, it  will trigger a miss on a read on one caller
+     * before the cache expires, so it will be done in advance.
+     *
+     * @param string|string[]   $cacheKey      Identifier for the cache item
+     * @param callable          $regenFunction function to generate cached content
+     * @param int|DateTime|null $ttl           time to live, number ofseconds as integer,
+     *                                         DateTime to expire at a specific time,
+     *                                         or null for default
+     * @param mixed             $args          variable argument list for $regenFunction
      *
      * @return mixed
-     *
-     * @todo This should be a generic wrapper in the cache driver, not part of Translate
      */
-    public function cacheReadSpOld($regenFunction, $ttl, $prefix)
+    public function cacheRead($cacheKey, $regenFunction, $ttl = null, $args = null)
     {
-        // get arg list minus the first three arguments explicitly listed
-        $args = func_get_args();
-        array_shift($args);
-        array_shift($args);
-        $cacheKey = implode('/', $args);
-        array_shift($args);
+        if (is_null($args)) {
+            $varArgs = array();
+        } else {
+            $varArgs = func_get_args();
+            array_shift($varArgs); // pull off $key
+            array_shift($varArgs); // pull off $regenFunction
+            array_shift($varArgs); // pull off $ttl
+        }
 
-        $item = $this->cache->getItem($cacheKey);
+        $item = $this->pool->getItem($cacheKey);
 
-        // Get the data from the cache using the "Item::SP_OLD" technique for dealing with stampedes
-        $cachedContent = $item->get(Stash\Item::SP_OLD);
+        // Get the data from cache using the Stash\Invalidation::PRECOMPUTE technique
+        // for dealing with stampedes
+        $cachedContent = $item->get(\Stash\Invalidation::OLD);
 
         // Check to see if the cache missed, which could mean that it either didn't exist or was stale.
         if ($item->isMiss()) {
-            // Mark this instance as the one regenerating the cache. Because our
-            // protection method is STASH_SP_OLD other Stash instances will use the
-            // old value and count it as a hit.
+            // Mark this instance as the one regenerating the cache.
             $item->lock();
 
             // Run the relatively expensive code.
-            $cachedContent = call_user_func_array($regenFunction, $args);
+            $cachedContent = call_user_func_array($regenFunction, $varArgs);
 
             // save result
             $item->set($cachedContent, $ttl);
@@ -389,8 +405,8 @@ class Translate
     /**
      * Sanitize plural form expression for use in PHP eval() call.
      *
-     * This function taken largely from PHP-gettext, which is Copyright (c) 2003, 2009 Danilo
-     * Segan <danilo@kvota.net> and 2005 Nico Kaiser <nico@siriux.net>
+     * This function started from code in PHP-gettext, which is Copyright (c) 2003, 2009
+     * Danilo Segan <danilo@kvota.net> and 2005 Nico Kaiser <nico@siriux.net>
      *
      * @param string $expr raw plural expression
      *

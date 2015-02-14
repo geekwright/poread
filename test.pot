@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR , YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-02-13 13:41-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME \n"
+"Language-Team: LANGUAGE \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: tokentest.php:44 tokentest.php:81
+msgid "%d pig went to the market"
+msgid_plural "%d pigs went to the market"
+msgstr[0] "%d pig went to the market"
+", and he was a badass pig"
+msgstr[1] "%d pigs went to the market"
+", and they was OK."
+
+#: tokentest.php:50
+msgid "Short tag"
+msgstr ""
+
+#: tokentest.php:52
+msgctxt "tool"
+msgid "Saw"
+msgstr ""
+
+#: tokentest.php:53
+msgctxt "observed"
+msgid "Saw"
+msgstr ""
+
+#: tokentest.php:57
+msgid "Configuration"
+msgstr ""
+
+#: tokentest.php:58
+msgid "Control Panel\nwith a lot of options\n"
+msgstr ""
+
+#. This is a comment for the translator
+#: tokentest.php:64
+msgid "Could not install autorun file. Please try again."
+msgstr ""
+
+#: tokentest.php:68
+msgid "Select a file or a folder"
+msgstr ""
+
+#. refering to floppy disk drive
+#: tokentest.php:70
+msgid "When ejecting the drive, close the apps that are locking it"
+msgstr ""
+
+#: tokentest.php:71
+msgid "You do not have sufficient privileges for this operation."
+msgstr ""
